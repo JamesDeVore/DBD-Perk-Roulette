@@ -1,0 +1,54 @@
+body{
+  background-color:black;
+  font-family:'Roboto condensed', sans-serif;
+  color:white;
+  text-align: center;
+  font-size: 15px;
+}
+.header{
+  display: flex;
+  justify-content: center;
+  text-shadow:
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+		1px 1px 0 #000;
+
+  background-image:url('https://i.cubeupload.com/U6x9NZ.jpg');
+  background-position: center;
+  background-size:cover;
+  background-repeat: no-repeat;
+
+}
+.controls{
+  display: flex;
+  justify-content: center;
+  height:150px;
+  width:50%;
+}
+.dlc-check {
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  vertical-align:middle;
+  margin-top:15px;
+}
+.DLC {
+  margin:10px;
+}
+.results-display{
+    text-transform: uppercase;
+    font-size: .8em;
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  width: auto;
+  overflow: hidden;
+
+}
+.perk-display{
+  margin:15px;
+  box-sizing: border-box;
+
+}
+.
