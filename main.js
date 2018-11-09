@@ -69,7 +69,7 @@ var perkFilterFunction = function(allPerkArray,curtainCall,shatteredBloodline,ha
 }
 //I want to choose 4 perks at random from the master array, and populate the HTML with the information from the randomly chosen perks
 $(document).ready(function() {
-  $('button').on('click', function() {
+  $('#perks-4').on('click', function() {
     $('.results-display').empty();
     var $curtainCallDlc = $('#curtainCall').attr('value');
     var $shatteredBloodlineDlc = $('#shatteredBloodline').attr('value');
@@ -80,6 +80,19 @@ $(document).ready(function() {
       var filteredSurvivorPerks = perks.perkFilterFunction(allSurvivorPerks,$curtainCallDlc,$shatteredBloodlineDlc,$halloweenDlc,$jigsawDlc);
     var randomResultsObject = perks.chooseRandomFourObjects(filteredSurvivorPerks);
     perks.displayResults(randomResultsObject)
+  });
+  $('#perks-3').on('click', function() {
+    $('.results-display').empty();
+    var $curtainCallDlc = $('#curtainCall').attr('value');
+    var $shatteredBloodlineDlc = $('#shatteredBloodline').attr('value');
+    var $halloweenDlc = $('#halloween').attr('value');
+    var $jigsawDlc = $('#jigsaw').attr('value');
+    var perks = perkChooser()
+    // var filteredSurvivorPerks = perks.perkFilterFunction(allSurvivorPerks,$curtainCallDlc,$shatteredBloodlineDlc,$halloweenDlc,$jigsawDlc);
+      var filteredSurvivorPerks = perks.perkFilterFunction(allSurvivorPerks,$curtainCallDlc,$shatteredBloodlineDlc,$halloweenDlc,$jigsawDlc);
+    var randomResultsObject = perks.chooseRandomFourObjects(filteredSurvivorPerks);
+    perks.displayResults(randomResultsObject);
+    $('.perk-display:first-child').empty()
   });
   $('.DLC').on('click', function() {
   var $check = $(this).attr('value');
