@@ -302,7 +302,10 @@ var allSurvivorPerks =[
       url: 'https://d1u5p3l4wpay3k.cloudfront.net/deadbydaylight_gamepedia_en/thumb/1/17/IconPerks_windowsOfOpportunity.png/150px-IconPerks_windowsOfOpportunity.png?version=0943796fdd385007ca758d45ca80567c',
       dlc: 'curtainCall',
       survivor: 'Kate'
-    }
+    },
+    {name:'Empty Perk',
+  url:'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/47/4756f26bbb4b2b7dafa7b8833699a90074746aba_full.jpg',
+dlc:'baseGame'}
   ]
 
 var allKillerPerks = []
