@@ -10,8 +10,9 @@ var perkChooser = function() {
     }
     if (checkForDuplicatePerks(randomPerkIndexes)) {
       console.log("I found a duplicate!");
-      randomPerkIndexes = []
-      $('.results-display').html("Oops. There was a duplicate and I haven't figured out how to fix that. Please try again :)")
+
+      // randomPerkIndexes = []
+      // $('.results-display').html("Oops. There was a duplicate and I haven't figured out how to fix that. Please try again :)")
     }
     //I want to make a new array using the 4 chosen indexes
     var randomPerkObjectsArray = [];
@@ -30,6 +31,7 @@ var perkChooser = function() {
     });
     for (var i = 0; i < sortedPerkArray.length - 1; i++) {
       if (sortedPerkArray[i] === sortedPerkArray[i + 1]) {
+        sortedPerkArray[i] = sortedPerkArray[i]+1;
         return true
       }
     }
@@ -44,26 +46,26 @@ var perkChooser = function() {
   };
 
 
-//I am trying to filter the main array into an array without the specified properties
-var perkFilterFunction = function(allPerkArray,curtainCall,shatteredBloodline,halloween,jigsaw){
-  var filteredPerks = [];
-  curtainCall == 'true'? curtainCall = 'curtainCall' : curtainCall = false;
-  shatteredBloodline == 'true'? shatteredBloodline = "shatteredBloodline" : shatteredBloodline = false;
-  halloween == 'true'? halloween = "halloween" : halloween = false;
-  jigsaw == 'true'? jigsaw = 'jigsaw' : jigsaw = false;
-  filteredPerks = allPerkArray.filter(function(perkObjects){
-    //for each one, I want to ask: does it have a desired property
+  //I am trying to filter the main array into an array without the specified properties
+  var perkFilterFunction = function(allPerkArray, curtainCall, shatteredBloodline, halloween, jigsaw) {
+    var filteredPerks = [];
+    curtainCall == 'true' ? curtainCall = 'curtainCall' : curtainCall = false;
+    shatteredBloodline == 'true' ? shatteredBloodline = "shatteredBloodline" : shatteredBloodline = false;
+    halloween == 'true' ? halloween = "halloween" : halloween = false;
+    jigsaw == 'true' ? jigsaw = 'jigsaw' : jigsaw = false;
+    filteredPerks = allPerkArray.filter(function(perkObjects) {
+      //for each one, I want to ask: does it have a desired property
 
-    return (perkObjects.dlc == curtainCall || perkObjects.dlc == shatteredBloodline || perkObjects.dlc == halloween || perkObjects.dlc == jigsaw || perkObjects.dlc == 'baseGame')
-  })
+      return (perkObjects.dlc == curtainCall || perkObjects.dlc == shatteredBloodline || perkObjects.dlc == halloween || perkObjects.dlc == jigsaw || perkObjects.dlc == 'baseGame')
+    })
 
-  return filteredPerks;
-}
+    return filteredPerks;
+  }
 
   return {
-    chooseRandomFourObjects:chooseRandomFourObjects,
-    displayResults:displayResults,
-    perkFilterFunction:perkFilterFunction
+    chooseRandomFourObjects: chooseRandomFourObjects,
+    displayResults: displayResults,
+    perkFilterFunction: perkFilterFunction
   };
 
 }
@@ -77,7 +79,7 @@ $(document).ready(function() {
     var $jigsawDlc = $('#jigsaw').attr('value');
     var perks = perkChooser()
     // var filteredSurvivorPerks = perks.perkFilterFunction(allSurvivorPerks,$curtainCallDlc,$shatteredBloodlineDlc,$halloweenDlc,$jigsawDlc);
-      var filteredSurvivorPerks = perks.perkFilterFunction(allSurvivorPerks,$curtainCallDlc,$shatteredBloodlineDlc,$halloweenDlc,$jigsawDlc);
+    var filteredSurvivorPerks = perks.perkFilterFunction(allSurvivorPerks, $curtainCallDlc, $shatteredBloodlineDlc, $halloweenDlc, $jigsawDlc);
     var randomResultsObject = perks.chooseRandomFourObjects(filteredSurvivorPerks);
     perks.displayResults(randomResultsObject)
   });
@@ -89,32 +91,17 @@ $(document).ready(function() {
     var $jigsawDlc = $('#jigsaw').attr('value');
     var perks = perkChooser()
     // var filteredSurvivorPerks = perks.perkFilterFunction(allSurvivorPerks,$curtainCallDlc,$shatteredBloodlineDlc,$halloweenDlc,$jigsawDlc);
-      var filteredSurvivorPerks = perks.perkFilterFunction(allSurvivorPerks,$curtainCallDlc,$shatteredBloodlineDlc,$halloweenDlc,$jigsawDlc);
+    var filteredSurvivorPerks = perks.perkFilterFunction(allSurvivorPerks, $curtainCallDlc, $shatteredBloodlineDlc, $halloweenDlc, $jigsawDlc);
     var randomResultsObject = perks.chooseRandomFourObjects(filteredSurvivorPerks);
     perks.displayResults(randomResultsObject);
     $('.perk-display:first-child').empty()
   });
   $('.DLC').on('click', function() {
-  var $check = $(this).attr('value');
-  if ($check == 'true') {
-    $(this).attr('value', 'false')
-  } else {
-    $(this).attr('value', 'true');
-  }
-})
+    var $check = $(this).attr('value');
+    if ($check == 'true') {
+      $(this).attr('value', 'false')
+    } else {
+      $(this).attr('value', 'true');
+    }
+  })
 });
-//
-// var perkFilterFunction = function(allPerkArray,curtainCall,shatteredBloodline,halloween,jigsaw){
-//   var filteredPerks = [];
-//   curtainCall == 'true'? curtainCall = 'curtainCall' : curtainCall = false;
-//   shatteredBloodline == 'true'? shatteredBloodline = "shatteredBloodline" : shatteredBloodline = false;
-//   halloween == 'true'? halloween = "halloween" : halloween = false;
-//   jigsaw == 'true'? jigsaw = 'jigsaw' : jigsaw = false;
-//   filteredPerks = allPerkArray.filter(function(perkObjects){
-//     //for each one, I want to ask: does it have a desired property
-//
-//     return (perkObjects.dlc == curtainCall || perkObjects.dlc == shatteredBloodline || perkObjects.dlc == halloween || perkObjects.dlc == jigsaw || perkObjects.dlc == 'baseGame')
-//   })
-//
-//   return filteredPerks;
-// }
