@@ -304,8 +304,14 @@ var allSurvivorPerks =[
       survivor: 'Kate'
     },
     {name:'Empty Perk',
-  url:'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/47/4756f26bbb4b2b7dafa7b8833699a90074746aba_full.jpg',
-dlc:'baseGame'}
+    url:'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/47/4756f26bbb4b2b7dafa7b8833699a90074746aba_full.jpg',
+    dlc:'baseGame'},
+    {name:'Empty Perk',
+    url:'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/47/4756f26bbb4b2b7dafa7b8833699a90074746aba_full.jpg',
+    dlc:'baseGame'},
+    {name:'Empty Perk',
+    url:'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/47/4756f26bbb4b2b7dafa7b8833699a90074746aba_full.jpg',
+    dlc:'baseGame'}
   ]
 
 var allKillerPerks = []
