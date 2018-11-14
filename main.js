@@ -173,6 +173,7 @@ $(document).ready(function() {
   $('#clear-choices').on('click',function(){
     perks.preferredPerks.length = 0;
     $('.results-display').empty();
+    $(document).find('.selected').removeClass('selected');
 
   })
 
@@ -184,6 +185,7 @@ $(document).ready(function() {
     // $('.results-display').empty();
     var perkNameString = $(this).find('p').html();
     perks.findPerkIndexAndAdd(perkNameString,allSurvivorPerks);
+    $(this).find('.icon-perk-choice').toggleClass('selected')
     //only doing this for handlebars
     // var choices = {};
     // choices['perks'] = perks.preferredPerks;
