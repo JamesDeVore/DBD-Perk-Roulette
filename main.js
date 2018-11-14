@@ -1,29 +1,29 @@
 //Module to control the selection of perks
 var perkChooser = function() {
-//Select DLC status, and keep track based on the controller buttons
+  //Select DLC status, and keep track based on the controller buttons
   var DLCs = {
-    curtainCall:false,
-    shatteredBloodline:false,
-    jigsaw:false,
-    halloween:false
+    curtainCall: false,
+    shatteredBloodline: false,
+    jigsaw: false,
+    halloween: false
   };
 
   var preferredPerks = [];
 
-  var DLCToggleFunction = function(clickedDLC){
+  var DLCToggleFunction = function(clickedDLC) {
     DLCs[clickedDLC] = !DLCs[clickedDLC]
   }
-//find the Perk index of the given perk
-  var findPerkIndexAndAdd = function(perkNameString, perkArray){
+  //find the Perk index of the given perk
+  var findPerkIndexAndAdd = function(perkNameString, perkArray) {
     verifyPreferredPerkLength();
-    var perkIndex = perkArray.findIndex(function(elementInArray){
+    var perkIndex = perkArray.findIndex(function(elementInArray) {
       return elementInArray.name == perkNameString;
     });
     preferredPerks.push(perkArray[perkIndex]);
   };
 
   var verifyPreferredPerkLength = function() {
-    if (preferredPerks.length === 4){
+    if (preferredPerks.length === 4) {
       preferredPerks.shift();
     }
   }
@@ -60,7 +60,7 @@ var perkChooser = function() {
     });
     for (var i = 0; i < sortedPerkArray.length - 1; i++) {
       if (sortedPerkArray[i] === sortedPerkArray[i + 1]) {
-        sortedPerkArray[i] = sortedPerkArray[i]+1;
+        sortedPerkArray[i] = sortedPerkArray[i] + 1;
         return true
       }
     }
@@ -68,41 +68,41 @@ var perkChooser = function() {
   };
 
 
-  var perkFilterFunctionV2 = function(){
+  var perkFilterFunctionV2 = function() {
     var includedDLCPerks = [];
-    if (DLCs['curtainCall']){
+    if (DLCs['curtainCall']) {
       includedDLCPerks.push(DLCfinderFunction('curtainCall'));
     };
-    if (DLCs['halloween']){
+    if (DLCs['halloween']) {
       includedDLCPerks.push(DLCfinderFunction('halloween'));
     };
-    if (DLCs['jigsaw']){
+    if (DLCs['jigsaw']) {
       includedDLCPerks.push(DLCfinderFunction('jigsaw'));
     };
-    if (DLCs['shatteredBloodline']){
+    if (DLCs['shatteredBloodline']) {
       includedDLCPerks.push(DLCfinderFunction('shatteredBloodline'));
     };
     includedDLCPerks.push(DLCfinderFunction('baseGame'))
     // now I need to put them all into an array and then push them inot the master one that gets put out
     var finalPerkPool = [];
-    for (var i=0; i<includedDLCPerks.length; i++){
-      for (var j=0; j<includedDLCPerks[i].length; j++){
+    for (var i = 0; i < includedDLCPerks.length; i++) {
+      for (var j = 0; j < includedDLCPerks[i].length; j++) {
         finalPerkPool.push(includedDLCPerks[i][j]);
       };
     };
     return finalPerkPool;
   };
 
-  var DLCfinderFunction = function(DLCString){
+  var DLCfinderFunction = function(DLCString) {
     var thisDLC = [];
-     thisDLC = allSurvivorPerks.filter(function(perkObjectsForDLC){
+    thisDLC = allSurvivorPerks.filter(function(perkObjectsForDLC) {
       return (perkObjectsForDLC.dlc == DLCString);
     });
     return thisDLC;
   };
 
 
-  var finalFunction = function(){
+  var finalFunction = function() {
     var filteredSurvivorPerks = perkFilterFunctionV2();
     var randomFourPerks = chooseRandomFourObjects(filteredSurvivorPerks);
     return randomFourPerks;
@@ -110,16 +110,16 @@ var perkChooser = function() {
   };
 
   return {
-    DLCs:DLCs,
-    finalFunction:finalFunction,
-    DLCToggleFunction:DLCToggleFunction,
-    findPerkIndexAndAdd:findPerkIndexAndAdd,
-    preferredPerks:preferredPerks
+    DLCs: DLCs,
+    finalFunction: finalFunction,
+    DLCToggleFunction: DLCToggleFunction,
+    findPerkIndexAndAdd: findPerkIndexAndAdd,
+    preferredPerks: preferredPerks
   };
 
 };
 
-var View = function(){
+var View = function() {
 
   var displayResults = function(dataObject) {
     var source = $('#perk-display-template').html();
@@ -127,17 +127,18 @@ var View = function(){
     var newHTML = template(dataObject);
     $('.results-display').append(newHTML);
   };
-  var displayPerkChoiceIcons = function(perkObjectsArray){
-    perkObjectsArray.forEach(function(perkObjects){
-    var source = $('#perk-choice-template').html();
-    var template = Handlebars.compile(source);
-    var newHTML = template(perkObjects);    $('.choice-controller').append(newHTML)
+  var displayPerkChoiceIcons = function(perkObjectsArray) {
+    perkObjectsArray.forEach(function(perkObjects) {
+      var source = $('#perk-choice-template').html();
+      var template = Handlebars.compile(source);
+      var newHTML = template(perkObjects);
+      $('.choice-controller').append(newHTML)
     })
   };
 
-  return{
-    displayResults:displayResults,
-    displayPerkChoiceIcons:displayPerkChoiceIcons
+  return {
+    displayResults: displayResults,
+    displayPerkChoiceIcons: displayPerkChoiceIcons
   }
 }
 
@@ -145,51 +146,46 @@ var View = function(){
 $(document).ready(function() {
   $('#perks-4').on('click', function() {
     $('.results-display').empty();
-  var results = perks.finalFunction();
-  perkView.displayResults(results);
-  var choices = {};
-  console.log(perks.preferredPerks)
+    var results = perks.finalFunction();
+    perkView.displayResults(results);
+    var choices = {};
+    console.log(perks.preferredPerks)
 
-  if (perks.preferredPerks.length > 0){
-  for(var i=0;i<perks.preferredPerks.length;i++){
-    $('.perk-display:first-child').remove()
-  }
-    choices['perks'] = perks.preferredPerks;
-    perkView.displayResults(choices)
-  }
+    if (perks.preferredPerks.length > 0) {
+      for (var i = 0; i < perks.preferredPerks.length; i++) {
+        $('.perk-display:first-child').remove()
+      }
+      choices['perks'] = perks.preferredPerks;
+      perkView.displayResults(choices)
+    }
+  })
 
-
-})
-
-  $('#perks-3').on('click', function() {
-    $('.results-display').empty();
-    var perks = perkChooser();
-    perks.finalFunction()
-    $('.perk-display:first-child').empty()
-
-  });
+  // $('#perks-3').on('click', function() {
+  //   $('.results-display').empty();
+  //   var perks = perkChooser();
+  //   perks.finalFunction()
+  //   $('.perk-display:first-child').empty()
+  //
+  // });
   //controllers to set the DLC preferences
 
-  $('#clear-choices').on('click',function(){
+  $('#clear-choices').on('click', function() {
     perks.preferredPerks.length = 0;
     $('.results-display').empty();
     $(document).find('.selected').removeClass('selected');
 
   })
 
-  $('.DLC').on('click',function(){
+  $('.DLC').on('click', function() {
     //Toggles DLC status in model
     perks.DLCToggleFunction($(this).attr('id'))
-    });
-  $(document).on('click','.perk-choice', function(){
+  });
+  $(document).on('click', '.perk-choice', function() {
     // $('.results-display').empty();
     var perkNameString = $(this).find('p').html();
-    perks.findPerkIndexAndAdd(perkNameString,allSurvivorPerks);
+    perks.findPerkIndexAndAdd(perkNameString, allSurvivorPerks);
     $(this).find('.icon-perk-choice').toggleClass('selected')
-    //only doing this for handlebars
-    // var choices = {};
-    // choices['perks'] = perks.preferredPerks;
-    // perkView.displayResults(choices)
+
   });
 });
 
