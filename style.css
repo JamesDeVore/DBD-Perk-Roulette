@@ -67,7 +67,7 @@ body{
   border:3px solid red;
 }
 .perk-choice-name-div{
-  display:none;
+  font-size:8px;
 }
 .selected{
   background-color:green;

@@ -61,7 +61,7 @@
 <script id="perk-choice-template" type="text/x-handlebars-template">
   <div class="perk-choice col-xs-1">
     <div class="perk-choice-icon">
-      <img src="{{ url }}" alt="" class="icon-perk-choice">
+      <img src="{{ url }}" alt="" title="{{ name }}" class="icon-perk-choice">
     </div>
     <div class="perk-choice-name-div">
       <p class="perk-choice-name">{{ name }}</p>
@@ -77,7 +77,7 @@
       <h3>{{ name }}</h3>
     </div>
     <div class="perkIcon">
-      <img src="{{ url }}" alt="" class="iconImg">
+      <img src="{{ url }}" alt="" title="{{ name }}" class="iconImg">
     </div>
   </div>
   {{/each}}
