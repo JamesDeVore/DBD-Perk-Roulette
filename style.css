@@ -4,6 +4,7 @@ body{
   color:white;
   text-align: center;
   font-size: 15px;
+  text-transform: capitalize;
 }
 .header{
   display: flex;
@@ -68,6 +69,7 @@ body{
 }
 .perk-choice-name-div{
   font-size:8px;
+  text-transform: capitalize;
 }
 .selected{
   background-color:green;
