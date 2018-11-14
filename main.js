@@ -1,5 +1,33 @@
 //Module to control the selection of perks
 var perkChooser = function() {
+//Select DLC status, and keep track based on the controller buttons
+  var DLCs = {
+    curtainCall:false,
+    shatteredBloodline:false,
+    jigsaw:false,
+    halloween:false
+  };
+
+  var preferredPerks = [];
+
+  var DLCToggleFunction = function(clickedDLC){
+    DLCs[clickedDLC] = !DLCs[clickedDLC]
+  }
+//find the Perk index of the given perk
+  var findPerkIndexAndAdd = function(perkNameString, perkArray){
+    verifyPreferredPerkLength();
+    var perkIndex = perkArray.findIndex(function(elementInArray){
+      return elementInArray.name == perkNameString;
+    });
+    preferredPerks.push(perkArray[perkIndex]);
+  };
+
+  var verifyPreferredPerkLength = function() {
+    if (preferredPerks.length === 4){
+      preferredPerks.shift();
+    }
+  }
+
   //Get four perk objects at random
   var chooseRandomFourObjects = function(perkObjectArray) {
     var randomPerkIndexes = [];
@@ -18,7 +46,8 @@ var perkChooser = function() {
     var randomPerkObjectsArray = [];
     for (var i = 0; i < 4; i++) {
       randomPerkObjectsArray.push(perkObjectArray[randomPerkIndexes[i]])
-    }
+    };
+
     var randomPerkArrayInObject = {
       perks: randomPerkObjectsArray
     }
@@ -38,70 +67,130 @@ var perkChooser = function() {
     return false;
   };
 
+
+  var perkFilterFunctionV2 = function(){
+    var includedDLCPerks = [];
+    if (DLCs['curtainCall']){
+      includedDLCPerks.push(DLCfinderFunction('curtainCall'));
+    };
+    if (DLCs['halloween']){
+      includedDLCPerks.push(DLCfinderFunction('halloween'));
+    };
+    if (DLCs['jigsaw']){
+      includedDLCPerks.push(DLCfinderFunction('jigsaw'));
+    };
+    if (DLCs['shatteredBloodline']){
+      includedDLCPerks.push(DLCfinderFunction('shatteredBloodline'));
+    };
+    includedDLCPerks.push(DLCfinderFunction('baseGame'))
+    // now I need to put them all into an array and then push them inot the master one that gets put out
+    var finalPerkPool = [];
+    for (var i=0; i<includedDLCPerks.length; i++){
+      for (var j=0; j<includedDLCPerks[i].length; j++){
+        finalPerkPool.push(includedDLCPerks[i][j]);
+      };
+    };
+    return finalPerkPool;
+  };
+
+  var DLCfinderFunction = function(DLCString){
+    var thisDLC = [];
+     thisDLC = allSurvivorPerks.filter(function(perkObjectsForDLC){
+      return (perkObjectsForDLC.dlc == DLCString);
+    });
+    return thisDLC;
+  };
+
+
+  var finalFunction = function(){
+    var filteredSurvivorPerks = perkFilterFunctionV2();
+    var randomFourPerks = chooseRandomFourObjects(filteredSurvivorPerks);
+    return randomFourPerks;
+
+  };
+
+  return {
+    DLCs:DLCs,
+    finalFunction:finalFunction,
+    DLCToggleFunction:DLCToggleFunction,
+    findPerkIndexAndAdd:findPerkIndexAndAdd,
+    preferredPerks:preferredPerks
+  };
+
+};
+
+var View = function(){
+
   var displayResults = function(dataObject) {
     var source = $('#perk-display-template').html();
     var template = Handlebars.compile(source);
     var newHTML = template(dataObject);
     $('.results-display').append(newHTML);
   };
-
-
-  //I am trying to filter the main array into an array without the specified properties
-  var perkFilterFunction = function(allPerkArray, curtainCall, shatteredBloodline, halloween, jigsaw) {
-    var filteredPerks = [];
-    curtainCall == 'true' ? curtainCall = 'curtainCall' : curtainCall = false;
-    shatteredBloodline == 'true' ? shatteredBloodline = "shatteredBloodline" : shatteredBloodline = false;
-    halloween == 'true' ? halloween = "halloween" : halloween = false;
-    jigsaw == 'true' ? jigsaw = 'jigsaw' : jigsaw = false;
-    filteredPerks = allPerkArray.filter(function(perkObjects) {
-      //for each one, I want to ask: does it have a desired property
-
-      return (perkObjects.dlc == curtainCall || perkObjects.dlc == shatteredBloodline || perkObjects.dlc == halloween || perkObjects.dlc == jigsaw || perkObjects.dlc == 'baseGame')
+  var displayPerkChoiceIcons = function(perkObjectsArray){
+    perkObjectsArray.forEach(function(perkObjects){
+    var source = $('#perk-choice-template').html();
+    var template = Handlebars.compile(source);
+    var newHTML = template(perkObjects);    $('.choice-controller').append(newHTML)
     })
-
-    return filteredPerks;
-  }
-
-  return {
-    chooseRandomFourObjects: chooseRandomFourObjects,
-    displayResults: displayResults,
-    perkFilterFunction: perkFilterFunction
   };
 
+  return{
+    displayResults:displayResults,
+    displayPerkChoiceIcons:displayPerkChoiceIcons
+  }
 }
+
 //I want to choose 4 perks at random from the master array, and populate the HTML with the information from the randomly chosen perks
 $(document).ready(function() {
   $('#perks-4').on('click', function() {
     $('.results-display').empty();
-    var $curtainCallDlc = $('#curtainCall').attr('value');
-    var $shatteredBloodlineDlc = $('#shatteredBloodline').attr('value');
-    var $halloweenDlc = $('#halloween').attr('value');
-    var $jigsawDlc = $('#jigsaw').attr('value');
-    var perks = perkChooser()
-    // var filteredSurvivorPerks = perks.perkFilterFunction(allSurvivorPerks,$curtainCallDlc,$shatteredBloodlineDlc,$halloweenDlc,$jigsawDlc);
-    var filteredSurvivorPerks = perks.perkFilterFunction(allSurvivorPerks, $curtainCallDlc, $shatteredBloodlineDlc, $halloweenDlc, $jigsawDlc);
-    var randomResultsObject = perks.chooseRandomFourObjects(filteredSurvivorPerks);
-    perks.displayResults(randomResultsObject)
-  });
+  var results = perks.finalFunction();
+  perkView.displayResults(results);
+  var choices = {};
+  console.log(perks.preferredPerks)
+
+  if (perks.preferredPerks.length > 0){
+  for(var i=0;i<perks.preferredPerks.length;i++){
+    $('.perk-display:first-child').remove()
+  }
+    choices['perks'] = perks.preferredPerks;
+    perkView.displayResults(choices)
+  }
+
+
+})
+
   $('#perks-3').on('click', function() {
     $('.results-display').empty();
-    var $curtainCallDlc = $('#curtainCall').attr('value');
-    var $shatteredBloodlineDlc = $('#shatteredBloodline').attr('value');
-    var $halloweenDlc = $('#halloween').attr('value');
-    var $jigsawDlc = $('#jigsaw').attr('value');
-    var perks = perkChooser()
-    // var filteredSurvivorPerks = perks.perkFilterFunction(allSurvivorPerks,$curtainCallDlc,$shatteredBloodlineDlc,$halloweenDlc,$jigsawDlc);
-    var filteredSurvivorPerks = perks.perkFilterFunction(allSurvivorPerks, $curtainCallDlc, $shatteredBloodlineDlc, $halloweenDlc, $jigsawDlc);
-    var randomResultsObject = perks.chooseRandomFourObjects(filteredSurvivorPerks);
-    perks.displayResults(randomResultsObject);
+    var perks = perkChooser();
+    perks.finalFunction()
     $('.perk-display:first-child').empty()
+
   });
-  $('.DLC').on('click', function() {
-    var $check = $(this).attr('value');
-    if ($check == 'true') {
-      $(this).attr('value', 'false')
-    } else {
-      $(this).attr('value', 'true');
-    }
+  //controllers to set the DLC preferences
+
+  $('#clear-choices').on('click',function(){
+    perks.preferredPerks.length = 0;
+    $('.results-display').empty();
+
   })
+
+  $('.DLC').on('click',function(){
+    //Toggles DLC status in model
+    perks.DLCToggleFunction($(this).attr('id'))
+    });
+  $(document).on('click','.perk-choice', function(){
+    // $('.results-display').empty();
+    var perkNameString = $(this).find('p').html();
+    perks.findPerkIndexAndAdd(perkNameString,allSurvivorPerks);
+    //only doing this for handlebars
+    // var choices = {};
+    // choices['perks'] = perks.preferredPerks;
+    // perkView.displayResults(choices)
+  });
 });
+
+perks = perkChooser();
+var perkView = View();
+perkView.displayPerkChoiceIcons(allSurvivorPerks)
