@@ -64,10 +64,12 @@ body{
 }
 .icon-perk-choice:hover{
   background-color: red;
+  border:3px solid red;
 }
 .perk-choice-name-div{
   display:none;
 }
 .selected{
   background-color:green;
+  border:3px solid green;
 }
